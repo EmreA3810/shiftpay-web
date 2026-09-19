@@ -1,0 +1,24 @@
+{
+  "name": "shiftpay-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "dev": "vite --port 3000",
+    "preview": "vite preview",
+    "build": "vite build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.3.0"
+  },
+  "dependencies": {
+    "@privy-io/react-auth": "^3.44.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  }
+}

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShiftPay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="glow-sphere sphere-1"></div>
+  <div class="glow-sphere sphere-2"></div>
+
+  <!-- LOGIN -->
+  <div class="screen active" id="screen-login">
+    <div class="login-page">
+      <div class="login-card glass-card">
+        <div class="login-brand">
+          <div class="brand-logo"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <h1 class="brand-title">ShiftPay<span class="accent-dot">.</span></h1>
+          <p class="login-subtitle">Vardiya Finansmani ve Hakedis Protokolu</p>
+        </div>
+        <div id="privy-auth-root"></div>
+        <p class="login-note">Privy ile tohumsuz Stellar cuzdani olusturulur.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROLE SELECT -->
+  <div class="screen" id="screen-role">
+    <div class="role-page">
+      <div class="role-header">
+        <h2>Hos geldin, <span id="role-user-name">Kullanici</span></h2>
+        <p>Hesap turunu sec. Bu secim dashboardunu belirler.</p>
+      </div>
+      <div class="role-cards">
+        <button class="role-card" id="role-employer">
+          <div class="role-icon">🏢</div>
+          <h3>Isveren (Employer)</h3>
+          <p>Sirket butcesini kilitle, isci tanimla, vardiya yonet, DeFindex ile nemalandir.</p>
+          <span class="role-tag">Kasa Yonetimi</span>
+        </button>
+        <button class="role-card" id="role-merchant">
+          <div class="role-icon">🏪</div>
+          <h3>Esnaf / Market</h3>
+          <p>Iscilerden odeme al, POS QR olustur, hasilatini banka IBANina cek.</p>
+          <span class="role-tag">Tahsilat ve POS</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPLOYER DASHBOARD -->
+  <div class="screen" id="screen-employer">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand-mini"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span>ShiftPay</span></div>
+        <span class="topbar-role-badge">Isveren Paneli</span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-user" id="employer-topbar-name">Kullanici</span>
+        <button class="btn-sm btn-outline" id="btn-employer-logout">Cikis</button>
+      </div>
+    </header>
+    <main class="dashboard">
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <button class="sidebar-btn active" data-panel="emp-overview"><span>📊</span> Genel Bakis</button>
+          <button class="sidebar-btn" data-panel="emp-deposit"><span>🔒</span> Teminat Kilitle</button>
+          <button class="sidebar-btn" data-panel="emp-workers"><span>👷</span> Isci Yonetimi</button>
+          <button class="sidebar-btn" data-panel="emp-shifts"><span>📋</span> Vardiya Takibi</button>
+          <button class="sidebar-btn" data-panel="emp-defindex"><span>📈</span> DeFindex Getiri</button>
+          <button class="sidebar-btn" data-panel="emp-anchor"><span>🇹🇷</span> Anchor / TL</button>
+        </nav>
+      </aside>
+      <div class="content">
+        <div class="panel active" id="emp-overview">
+          <h2 class="page-title">Genel Bakis</h2>
+          <div class="stat-grid">
+            <div class="stat-card glass-card"><span class="stat-label">Kilitli Teminat</span><span class="stat-val" id="emp-stat-locked">0.00 USDC</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">DeFindex Getirisi</span><span class="stat-val text-green" id="emp-stat-yield">+0.00 USDC</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Kayitli Isci</span><span class="stat-val" id="emp-stat-workers">0</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Aktif Vardiya</span><span class="stat-val text-cyan" id="emp-stat-shifts">0</span></div>
+          </div>
+          <div class="card glass-card mt-4">
+            <h3>Sozlesme Bilgileri</h3>
+            <div class="info-row"><span class="info-label">Contract ID</span><a href="https://stellar.expert/explorer/testnet/contract/CDV3G7DHQEVUAMKRKK6UXVAUPLY277RRJVZNYAQX44OK4VIW5XUWFPII" target="_blank" class="info-val mono link">CDV3G7DH...WFPII</a></div>
+            <div class="info-row"><span class="info-label">Ag</span><span class="info-val">Stellar Testnet (Soroban)</span></div>
+            <div class="info-row"><span class="info-label">Turk Anchor</span><span class="info-val mono">tr-mock-anchor.fly.dev</span></div>
+          </div>
+        </div>
+        <div class="panel" id="emp-deposit">
+          <h2 class="page-title">Teminat Kilitle (deposit)</h2>
+          <div class="card glass-card">
+            <form id="form-emp-deposit">
+              <div class="form-group"><label>Tutar (USDC)</label><input type="number" id="inp-deposit-amount" value="10000" min="100" step="50" required></div>
+              <div class="form-group"><label>Vade (Gun)</label><select id="inp-deposit-lock"><option value="30">30 Gun</option><option value="60">60 Gun</option><option value="90">90 Gun</option></select></div>
+              <div class="form-check"><input type="checkbox" id="inp-defindex-auto" checked><label for="inp-defindex-auto">Atil butceyi DeFindex Vaultta nemalandir (%11.45 APY)</label></div>
+              <button type="submit" class="btn btn-primary btn-block">Teminati Kilitle</button>
+            </form>
+          </div>
+        </div>
+        <div class="panel" id="emp-workers">
+          <h2 class="page-title">Isci Yonetimi</h2>
+          <div class="card glass-card">
+            <h3>Yeni Isci Ekle</h3>
+            <form id="form-add-worker">
+              <div class="form-group"><label>Isci Cuzdan Adresi (Stellar)</label><input type="text" id="inp-worker-addr" placeholder="G..." class="mono" required></div>
+              <div class="form-group"><label>Isci Adi</label><input type="text" id="inp-worker-name" placeholder="Ad Soyad" required></div>
+              <div class="form-group"><label>Gunluk Ucret (TRY)</label><input type="number" id="inp-worker-wage" value="1200" min="100" step="50" required></div>
+              <button type="submit" class="btn btn-accent btn-block">Isciyi Kaydet</button>
+            </form>
+          </div>
+          <div class="card glass-card mt-4">
+            <h3>Kayitli Isciler</h3>
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>Isim</th><th>Cuzdan</th><th>Gunluk Ucret</th><th>Durum</th></tr></thead><tbody id="workers-tbody"><tr class="empty-row"><td colspan="4">Henuz isci eklenmedi.</td></tr></tbody></table></div>
+          </div>
+        </div>
+        <div class="panel" id="emp-shifts">
+          <h2 class="page-title">Vardiya Takibi</h2>
+          <div class="card glass-card">
+            <div class="table-wrap"><table class="data-table"><thead><tr><th>Isci</th><th>Giris</th><th>Cikis</th><th>Sure</th><th>Hakedis</th><th>Durum</th></tr></thead><tbody id="shifts-tbody"><tr class="empty-row"><td colspan="6">Henuz vardiya kaydi yok.</td></tr></tbody></table></div>
+          </div>
+        </div>
+        <div class="panel" id="emp-defindex">
+          <h2 class="page-title">DeFindex Vault Getiri</h2>
+          <div class="card glass-card">
+            <div class="info-row"><span class="info-label">Vault ID</span><span class="info-val mono">CCJWW63W...ITD5</span></div>
+            <div class="info-row"><span class="info-label">APY</span><span class="info-val text-green">%11.45</span></div>
+            <div class="info-row"><span class="info-label">Nemalasan</span><span class="info-val" id="defindex-principal">0 USDC</span></div>
+            <div class="info-row"><span class="info-label">Biriken Getiri</span><span class="info-val text-green" id="defindex-earned">+0 USDC</span></div>
+          </div>
+        </div>
+        <div class="panel" id="emp-anchor">
+          <h2 class="page-title">Turk Anchor (SEP-6)</h2>
+          <div class="card glass-card">
+            <p class="text-muted mb-3">USDC to TRY off-ramp.</p>
+            <a href="https://tr-mock-anchor.fly.dev/explorer" target="_blank" class="btn btn-primary">Anchor Explorer</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MERCHANT DASHBOARD -->
+  <div class="screen" id="screen-merchant">
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand-mini"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span>ShiftPay</span></div>
+        <span class="topbar-role-badge badge-merchant">Esnaf Paneli</span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-user" id="merchant-topbar-name">Kullanici</span>
+        <button class="btn-sm btn-outline" id="btn-merchant-logout">Cikis</button>
+      </div>
+    </header>
+    <main class="dashboard">
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <button class="sidebar-btn active" data-panel="mrc-overview"><span>📊</span> Genel Bakis</button>
+          <button class="sidebar-btn" data-panel="mrc-pos"><span>📱</span> POS / Odeme Al</button>
+          <button class="sidebar-btn" data-panel="mrc-transactions"><span>📋</span> Islem Gecmisi</button>
+          <button class="sidebar-btn" data-panel="mrc-withdraw"><span>🏦</span> IBANa Cek</button>
+        </nav>
+      </aside>
+      <div class="content">
+        <div class="panel active" id="mrc-overview">
+          <h2 class="page-title">Genel Bakis</h2>
+          <div class="stat-grid">
+            <div class="stat-card glass-card"><span class="stat-label">Gunluk Tahsilat</span><span class="stat-val text-green" id="mrc-stat-today">0.00 TRY</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Toplam Bakiye</span><span class="stat-val text-cyan" id="mrc-stat-total">0.00 TRY</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Bugunku Islem</span><span class="stat-val" id="mrc-stat-txcount">0</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">IBANa Cekilen</span><span class="stat-val" id="mrc-stat-withdrawn">0.00 TRY</span></div>
+          </div>
+        </div>
+        <div class="panel" id="mrc-pos">
+          <h2 class="page-title">POS Odeme Al</h2>
+          <div class="card glass-card text-center">
+            <div class="pos-amount-display">
+              <span class="pos-currency">TRY</span>
+              <input type="number" id="inp-pos-amount" value="180" min="5" step="5" class="pos-amount-input">
+            </div>
+            <div class="qr-area">
+              <div class="qr-placeholder" id="qr-canvas">
+                <svg width="160" height="160" viewBox="0 0 24 24" fill="currentColor" opacity="0.3"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm2 5h3v3h-3v-3zm3 0h3v3h-3v-3zm-5 2h2v2h-2v-2zm-3-4h2v2h-2v-2z"/></svg>
+              </div>
+              <p class="qr-hint">Isci bu QRi cuzdan uygulamasindan okutarak odeme yapar.</p>
+            </div>
+            <button class="btn btn-accent btn-block mt-3" id="btn-generate-qr">QR Olustur</button>
+            <button class="btn btn-ghost btn-block mt-2" id="btn-simulate-payment">Odeme Simule Et (Test)</button>
+          </div>
+        </div>
+        <div class="panel" id="mrc-transactions">
+          <h2 class="page-title">Islem Gecmisi</h2>
+          <div class="card glass-card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Tarih</th><th>Isci</th><th>Tutar</th><th>Durum</th></tr></thead><tbody id="mrc-tx-tbody"><tr class="empty-row"><td colspan="4">Henuz islem yok.</td></tr></tbody></table></div></div>
+        </div>
+        <div class="panel" id="mrc-withdraw">
+          <h2 class="page-title">IBANa TL Cek (SEP-6 Off-Ramp)</h2>
+          <div class="card glass-card">
+            <form id="form-mrc-withdraw">
+              <div class="form-group"><label>Cekilecek Tutar (TRY)</label><input type="number" id="inp-withdraw-amount" min="50" step="10" required></div>
+              <div class="form-group"><label>Sirket IBAN</label><input type="text" id="inp-withdraw-iban" placeholder="TR..." class="mono" required></div>
+              <button type="submit" class="btn btn-primary btn-block">Anchor Uzerinden IBANa Cek</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="toast-container"></div>
+    <script type="module" src="/privy-bridge.jsx"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
+
+
