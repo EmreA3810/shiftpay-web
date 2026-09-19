@@ -18,6 +18,8 @@
   },
   "dependencies": {
     "@privy-io/react-auth": "^3.44.0",
+    "html5-qrcode": "^2.3.8",
+    "qrcode": "^1.5.4",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ShiftPay</title>
+  <title>ShiftPay — Günübirlik Vardiya Finansmanı</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
@@ -13,196 +13,476 @@
   <div class="glow-sphere sphere-1"></div>
   <div class="glow-sphere sphere-2"></div>
 
-  <!-- LOGIN -->
+  <!-- ===== SCREEN 1: LOGIN ===== -->
   <div class="screen active" id="screen-login">
     <div class="login-page">
       <div class="login-card glass-card">
         <div class="login-brand">
-          <div class="brand-logo"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <div class="brand-logo">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
           <h1 class="brand-title">ShiftPay<span class="accent-dot">.</span></h1>
-          <p class="login-subtitle">Vardiya Finansmani ve Hakedis Protokolu</p>
+          <p class="login-subtitle">Vardiya Finansmanı &amp; Hakediş Protokolü</p>
         </div>
         <div id="privy-auth-root"></div>
-        <p class="login-note">Privy ile tohumsuz Stellar cuzdani olusturulur.</p>
+        <p class="login-note">Privy ile tohumsuz Stellar cüzdanı oluşturulur.</p>
       </div>
     </div>
   </div>
 
-  <!-- ROLE SELECT -->
+  <!-- ===== SCREEN 2: ROLE SELECT ===== -->
   <div class="screen" id="screen-role">
     <div class="role-page">
       <div class="role-header">
-        <h2>Hos geldin, <span id="role-user-name">Kullanici</span></h2>
-        <p>Hesap turunu sec. Bu secim dashboardunu belirler.</p>
+        <h2>Hoş geldin, <span id="role-user-name">Kullanıcı</span></h2>
+        <p>Hesap türünü seç. Bu seçim dashboard'unu belirler.</p>
       </div>
       <div class="role-cards">
         <button class="role-card" id="role-employer">
           <div class="role-icon">🏢</div>
-          <h3>Isveren (Employer)</h3>
-          <p>Sirket butcesini kilitle, isci tanimla, vardiya yonet, DeFindex ile nemalandir.</p>
-          <span class="role-tag">Kasa Yonetimi</span>
+          <h3>İşveren (Employer)</h3>
+          <p>Şantiye terminali aç, canlı check-in/out QR üret, işçi hakedişlerini ve mesai sürelerini yönet, DeFindex ile atıl kasayı nemalandır.</p>
+          <span class="role-tag">Şantiye &amp; İşçi Yönetimi</span>
         </button>
         <button class="role-card" id="role-merchant">
           <div class="role-icon">🏪</div>
           <h3>Esnaf / Market</h3>
-          <p>Iscilerden odeme al, POS QR olustur, hasilatini banka IBANina cek.</p>
-          <span class="role-tag">Tahsilat ve POS</span>
+          <p>İşçilerden QR ile ödeme al, POS tahsilatı yap, hasılatını banka IBAN'ına çek.</p>
+          <span class="role-tag">POS &amp; Tahsilat</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- EMPLOYER DASHBOARD -->
+  <!-- ===== SCREEN 3: EMPLOYER DASHBOARD ===== -->
   <div class="screen" id="screen-employer">
     <header class="topbar">
       <div class="topbar-left">
-        <div class="brand-mini"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span>ShiftPay</span></div>
-        <span class="topbar-role-badge">Isveren Paneli</span>
+        <div class="brand-mini">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <span>ShiftPay</span>
+        </div>
+        <span class="topbar-role-badge">İşveren Paneli</span>
       </div>
       <div class="topbar-right">
-        <span class="topbar-user" id="employer-topbar-name">Kullanici</span>
-        <button class="btn-sm btn-outline" id="btn-employer-logout">Cikis</button>
+        <button class="btn-sm btn-accent mr-2" id="btn-topbar-scan-emp" style="display: inline-flex; align-items: center; gap: 6px;">
+          <span>📷</span> Tek QR Oku
+        </button>
+        <span class="topbar-user" id="employer-topbar-name">Kullanıcı</span>
+        <button class="btn-sm btn-outline" id="btn-employer-logout">Çıkış</button>
       </div>
     </header>
+
     <main class="dashboard">
       <aside class="sidebar">
         <nav class="sidebar-nav">
-          <button class="sidebar-btn active" data-panel="emp-overview"><span>📊</span> Genel Bakis</button>
-          <button class="sidebar-btn" data-panel="emp-deposit"><span>🔒</span> Teminat Kilitle</button>
-          <button class="sidebar-btn" data-panel="emp-workers"><span>👷</span> Isci Yonetimi</button>
+          <button class="sidebar-btn active" data-panel="emp-terminal"><span>📱</span> Şantiye Terminali (QR)</button>
+          <button class="sidebar-btn" data-panel="emp-workers"><span>👥</span> İşçi &amp; Hakediş Yönetimi</button>
+          <button class="sidebar-btn" data-panel="emp-deposit"><span>🔒</span> Teminat Kilitle &amp; Getiri</button>
           <button class="sidebar-btn" data-panel="emp-shifts"><span>📋</span> Vardiya Takibi</button>
-          <button class="sidebar-btn" data-panel="emp-defindex"><span>📈</span> DeFindex Getiri</button>
+          <button class="sidebar-btn" data-panel="emp-contract"><span>⚡</span> Sözleşme Detayları</button>
           <button class="sidebar-btn" data-panel="emp-anchor"><span>🇹🇷</span> Anchor / TL</button>
         </nav>
       </aside>
+
       <div class="content">
-        <div class="panel active" id="emp-overview">
-          <h2 class="page-title">Genel Bakis</h2>
-          <div class="stat-grid">
-            <div class="stat-card glass-card"><span class="stat-label">Kilitli Teminat</span><span class="stat-val" id="emp-stat-locked">0.00 USDC</span></div>
-            <div class="stat-card glass-card"><span class="stat-label">DeFindex Getirisi</span><span class="stat-val text-green" id="emp-stat-yield">+0.00 USDC</span></div>
-            <div class="stat-card glass-card"><span class="stat-label">Kayitli Isci</span><span class="stat-val" id="emp-stat-workers">0</span></div>
-            <div class="stat-card glass-card"><span class="stat-label">Aktif Vardiya</span><span class="stat-val text-cyan" id="emp-stat-shifts">0</span></div>
+        <!-- PANEL 1 (DEFAULT ACTIVE): ŞANTİYE TERMINALI (QR DOĞRUDAN SAYFADA) -->
+        <div class="panel active" id="emp-terminal">
+          <!-- Live DeFindex Stream Banner -->
+          <div class="defindex-live-banner glass-card mb-3">
+            <div class="live-banner-content">
+              <div class="live-pulse-dot"></div>
+              <div>
+                <div class="live-banner-title">⚡ DeFindex Canlı Bileşik Getiri Akışı (%11.45 APY)</div>
+                <div class="live-banner-sub">Kalan kilitli kasa atıl durmaz; saniye saniye nemalanarak işveren maliyetini düşürür.</div>
+              </div>
+            </div>
+            <div class="live-yield-stream text-green mono" id="live-stream-counter">+0.000000 USDC</div>
           </div>
-          <div class="card glass-card mt-4">
-            <h3>Sozlesme Bilgileri</h3>
-            <div class="info-row"><span class="info-label">Contract ID</span><a href="https://stellar.expert/explorer/testnet/contract/CDV3G7DHQEVUAMKRKK6UXVAUPLY277RRJVZNYAQX44OK4VIW5XUWFPII" target="_blank" class="info-val mono link">CDV3G7DH...WFPII</a></div>
-            <div class="info-row"><span class="info-label">Ag</span><span class="info-val">Stellar Testnet (Soroban)</span></div>
-            <div class="info-row"><span class="info-label">Turk Anchor</span><span class="info-val mono">tr-mock-anchor.fly.dev</span></div>
+
+          <!-- Employer Top Stats -->
+          <div class="stat-grid mb-4">
+            <div class="stat-card glass-card">
+              <span class="stat-label">Kilitli Teminat (Kalan)</span>
+              <span class="stat-val" id="emp-stat-locked">10,000.00 USDC</span>
+            </div>
+            <div class="stat-card glass-card">
+              <span class="stat-label">DeFindex Getirisi</span>
+              <span class="stat-val text-green" id="emp-stat-yield">+14.8520 USDC</span>
+            </div>
+            <div class="stat-card glass-card">
+              <span class="stat-label">Dağıtılan Maaş</span>
+              <span class="stat-val text-cyan" id="emp-stat-spent">0.00 USDC</span>
+            </div>
+            <div class="stat-card glass-card">
+              <span class="stat-label">Aktif Çalışan İşçi</span>
+              <span class="stat-val" id="emp-stat-workers">0</span>
+            </div>
           </div>
-        </div>
-        <div class="panel" id="emp-deposit">
-          <h2 class="page-title">Teminat Kilitle (deposit)</h2>
+
+          <!-- DOĞRUDAN SAYFADA CANLI CHECK-IN / CHECK-OUT QR KARTI -->
+          <div class="card glass-card text-center mb-4" style="max-width: 580px; margin-left: auto; margin-right: auto; border: 1px solid rgba(0, 206, 201, 0.4); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);">
+            
+            <!-- QR MODU SEÇİCİ (GİRİŞ vs ÇIKIŞ) -->
+            <div class="terminal-mode-toggle">
+              <button class="terminal-mode-btn active" id="btn-mode-checkin" type="button">
+                <span>🟢</span> Giriş QR'ı (Check-In)
+              </button>
+              <button class="terminal-mode-btn" id="btn-mode-checkout" type="button">
+                <span>🏁</span> Çıkış QR'ı (Check-Out)
+              </button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+              <span class="badge badge-active" id="terminal-qr-badge" style="font-size: 0.85rem; padding: 6px 14px;">
+                ● Canlı Şantiye Check-In QR'ı
+              </span>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-sm btn-outline" id="btn-print-qr-pdf" title="QR Kodunu PDF Olarak Bastır / İndir" style="display: inline-flex; align-items: center; gap: 4px;">
+                  <span>📄</span> PDF Yazdır
+                </button>
+                <button class="btn-sm btn-ghost" id="btn-refresh-terminal-qr" title="Günün QR'ını Yenile">
+                  🔄 QR Yenile
+                </button>
+              </div>
+            </div>
+
+            <!-- GERÇEK DİNAMİK QR KODU -->
+            <div class="qr-display-container" style="display: inline-block; padding: 16px; background: #ffffff; border-radius: 20px; box-shadow: 0 16px 40px rgba(0, 206, 201, 0.3); margin-bottom: 1.25rem;">
+              <img id="employer-qr-img" alt="Şantiye QR Kodu" style="width: 230px; height: 230px; display: block; border-radius: 10px;">
+            </div>
+
+            <p class="text-muted" id="terminal-qr-hint" style="font-size: 0.88rem; margin-bottom: 1.25rem; line-height: 1.4;">
+              İşçiler şantiyeye geldiğinde bu QR'ı mobil uygulamalarından okutur. Kişi adı ve Stellar cüzdan adresi (<code class="mono">G...</code>) anında otomatik olarak sisteme çekilir.
+            </p>
+
+            <!-- DOĞRUDAN QR'IN ALTINDAKİ GÜNLÜK ÜCRET & ATANAN SÜRE ALANI -->
+            <div class="card glass-card text-center mb-3" id="terminal-wage-card" style="padding: 1.25rem; background: rgba(10, 14, 26, 0.85); border: 1px solid rgba(0, 206, 201, 0.35);">
+              <div style="display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <div>
+                  <label style="display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                    Günlük Ücret (TRY)
+                  </label>
+                  <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <span style="font-size: 1.6rem; font-weight: 700; color: var(--accent);">₺</span>
+                    <input type="number" id="inp-terminal-wage" value="1200" min="100" step="50" style="width: 130px; font-size: 1.7rem; font-weight: 800; text-align: center; background: transparent; border: none; border-bottom: 2px solid var(--accent); color: #fff; font-family: var(--font);">
+                    <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">TRY</span>
+                  </div>
+                </div>
+
+                <div style="border-left: 1px solid var(--border); padding-left: 20px;">
+                  <label style="display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                    Atanan Mesai (Saat)
+                  </label>
+                  <div style="display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <input type="number" id="inp-terminal-hours" value="8" min="1" max="24" step="1" style="width: 70px; font-size: 1.7rem; font-weight: 800; text-align: center; background: transparent; border: none; border-bottom: 2px solid var(--accent); color: #fff; font-family: var(--font);">
+                    <span style="font-size: 0.95rem; color: #fff; font-weight: 700;">Saat</span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-muted" style="font-size: 0.78rem; margin-top: 10px; margin-bottom: 0;">
+                ⚡ İşçi bu süreyi doldurmadan çıkış yapamaz. Çıkış anında kasadan gerçek para düşmez; işçinin kontrat içindeki kullanılabilir harcama limiti (balances) artar. Gerçek transfer yalnızca işçi esnafta harcadığında veya nakit çektiğinde olur.
+              </p>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button class="btn btn-accent btn-block" id="btn-simulate-worker-scan" style="padding: 12px; font-size: 0.95rem;">
+                <span id="btn-simulate-text">📱 Mobil Giriş Taramasını Simüle Et (Check-In)</span>
+              </button>
+              <button class="btn btn-outline btn-block" id="btn-open-scanner-emp" style="padding: 10px; font-size: 0.9rem;">
+                <span>📷 Tek QR Okuyucu ile Tara</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- KULLANICI / İŞÇİ YÖNETİMİ TABLOSU (GİRİŞ/ÇIKIŞ SAATLERİ & ATANAN SÜRE & DÜZENLENEBİLİR HAKEDİŞ) -->
           <div class="card glass-card">
-            <form id="form-emp-deposit">
-              <div class="form-group"><label>Tutar (USDC)</label><input type="number" id="inp-deposit-amount" value="10000" min="100" step="50" required></div>
-              <div class="form-group"><label>Vade (Gun)</label><select id="inp-deposit-lock"><option value="30">30 Gun</option><option value="60">60 Gun</option><option value="90">90 Gun</option></select></div>
-              <div class="form-check"><input type="checkbox" id="inp-defindex-auto" checked><label for="inp-defindex-auto">Atil butceyi DeFindex Vaultta nemalandir (%11.45 APY)</label></div>
-              <button type="submit" class="btn btn-primary btn-block">Teminati Kilitle</button>
-            </form>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <h3 style="margin-bottom: 2px;">👥 İşçi &amp; Hakediş Yönetimi (Mesai &amp; Saat Takibi)</h3>
+                <p class="text-muted" style="font-size: 0.8rem; margin: 0;">
+                  İşçilerin giriş-çıkış tarih/saatlerini görebilir, atanan saat sınırını takip edebilir ve hakedişlerini anında düzenleyebilirsiniz.
+                </p>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <span class="badge badge-active" id="active-worker-count-badge">0 Çalışıyor</span>
+                <span class="badge" id="completed-worker-count-badge" style="background: rgba(46, 213, 115, 0.15); color: #2ed573; border: 1px solid rgba(46, 213, 115, 0.3);">0 Çıkış Yaptı</span>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>İşçi</th>
+                    <th>Cüzdan (Stellar)</th>
+                    <th>Giriş (Tarih &amp; Saat)</th>
+                    <th>Çıkış (Tarih &amp; Saat)</th>
+                    <th>Atanan Süre</th>
+                    <th>Çalışılan Süre</th>
+                    <th>Günlük Hakediş</th>
+                    <th>Durum</th>
+                    <th>Kullanılabilir Limit / İşlem</th>
+                  </tr>
+                </thead>
+                <tbody id="terminal-workers-tbody">
+                  <tr class="empty-row">
+                    <td colspan="9">Henüz QR okutan işçi yok. Yukarıdaki Giriş QR kodunu okutarak işçi girişi yapın.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+
+        <!-- PANEL 2: ÖZEL İŞÇİ & HAKEDİŞ YÖNETİMİ PANELİ (SIDEBARDA DA VAR) -->
         <div class="panel" id="emp-workers">
-          <h2 class="page-title">Isci Yonetimi</h2>
+          <h2 class="page-title">İşçi &amp; Hakediş Yönetimi</h2>
+          <div class="stat-grid mb-4">
+            <div class="stat-card glass-card"><span class="stat-label">Toplam Kayıtlı İşçi</span><span class="stat-val" id="mgmt-stat-total">0</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Şu An Şantiyede</span><span class="stat-val text-green" id="mgmt-stat-active">0</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Vardiyayı Tamamlayan</span><span class="stat-val text-cyan" id="mgmt-stat-completed">0</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Toplam Tahakkuk Eden</span><span class="stat-val text-green" id="mgmt-stat-payroll">0.00 TRY</span></div>
+          </div>
+
           <div class="card glass-card">
-            <h3>Yeni Isci Ekle</h3>
-            <form id="form-add-worker">
-              <div class="form-group"><label>Isci Cuzdan Adresi (Stellar)</label><input type="text" id="inp-worker-addr" placeholder="G..." class="mono" required></div>
-              <div class="form-group"><label>Isci Adi</label><input type="text" id="inp-worker-name" placeholder="Ad Soyad" required></div>
-              <div class="form-group"><label>Gunluk Ucret (TRY)</label><input type="number" id="inp-worker-wage" value="1200" min="100" step="50" required></div>
-              <button type="submit" class="btn btn-accent btn-block">Isciyi Kaydet</button>
+            <h3 style="margin-bottom: 0.75rem;">Detaylı İşçi Listesi &amp; Saat Takibi</h3>
+            <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">
+              Her işçinin saat hedefini ve hakedişini dilediğiniz gibi güncelleyebilir, süresini dolduranların çıkışını onaylayabilirsiniz.
+            </p>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>İşçi</th>
+                    <th>Cüzdan (Stellar)</th>
+                    <th>Giriş Saati</th>
+                    <th>Çıkış Saati</th>
+                    <th>Atanan Süre</th>
+                    <th>Çalışılan Süre</th>
+                    <th>Hakediş (Düzenle)</th>
+                    <th>Durum</th>
+                    <th>Kullanılabilir Limit / İşlem</th>
+                  </tr>
+                </thead>
+                <tbody id="mgmt-workers-tbody">
+                  <tr class="empty-row"><td colspan="9">Henüz kayıtlı işçi yok. Şantiye terminalinden QR okutun.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL 3: TEMİNAT KİLİTLE & DEFINDEX SİMÜLATÖRÜ -->
+        <div class="panel" id="emp-deposit">
+          <h2 class="page-title">Teminat Kilitle &amp; DeFindex Bileşik Getiri</h2>
+          <div class="card glass-card mb-4">
+            <form id="form-emp-deposit">
+              <div class="form-group"><label>Tutar (USDC)</label><input type="number" id="inp-deposit-amount" value="10000" min="100" step="100" required></div>
+              <div class="form-group"><label>Vade (Gün)</label><select id="inp-deposit-lock"><option value="30">30 Gün</option><option value="60">60 Gün</option><option value="90">90 Gün</option></select></div>
+              <div class="form-check"><input type="checkbox" id="inp-defindex-auto" checked><label for="inp-defindex-auto">Atıl bütçeyi DeFindex Vault'ta bileşik faizle nemalandır (%11.45 APY)</label></div>
+              <button type="submit" class="btn btn-primary btn-block">Teminatı Kilitle &amp; DeFindex Vault'a Aktar</button>
             </form>
           </div>
-          <div class="card glass-card mt-4">
-            <h3>Kayitli Isciler</h3>
-            <div class="table-wrap"><table class="data-table"><thead><tr><th>Isim</th><th>Cuzdan</th><th>Gunluk Ucret</th><th>Durum</th></tr></thead><tbody id="workers-tbody"><tr class="empty-row"><td colspan="4">Henuz isci eklenmedi.</td></tr></tbody></table></div>
+
+          <!-- 30 Günlük Atıl Kasa Bileşik Getiri Simülatörü -->
+          <div class="card glass-card" id="defindex-sim-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+              <h3 style="margin-bottom: 0;">📈 30 Günlük Atıl Kasa Bileşik Getiri Simülatörü</h3>
+              <span class="badge badge-active">DeFindex Vault</span>
+            </div>
+            <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1.25rem;">
+              İşçilere her gün maaş ödendikçe kasanız azalır; ancak <strong>kasada kalan her bir kuruş</strong> her gün DeFindex'te bileşik getiri üretmeye devam eder.
+            </p>
+            <div class="sim-metrics-grid">
+              <div class="sim-metric-box">
+                <span class="sim-metric-label">Toplam Kilitlenen Kasa</span>
+                <span class="sim-metric-val" id="sim-total-locked">10,000 USDC</span>
+              </div>
+              <div class="sim-metric-box">
+                <span class="sim-metric-label">Günlük Tahmini Maaş Çıkışı</span>
+                <span class="sim-metric-val text-cyan" id="sim-daily-payout">333.33 USDC/gün</span>
+              </div>
+              <div class="sim-metric-box">
+                <span class="sim-metric-label">30 Günde Kazanılan Bileşik Nema</span>
+                <span class="sim-metric-val text-green" id="sim-total-yield">+47.88 USDC</span>
+              </div>
+              <div class="sim-metric-box">
+                <span class="sim-metric-label">Net Şirket Bordro Tasarrufu</span>
+                <span class="sim-metric-val text-green" id="sim-savings-rate">%1.45 Tasarruf</span>
+              </div>
+            </div>
+
+            <div class="table-wrap mt-4">
+              <table class="data-table" id="sim-table">
+                <thead>
+                  <tr><th>Dönem</th><th>Kasadaki Kalan Para</th><th>Günlük DeFindex Getirisi</th><th>Toplam Biriken Nema</th></tr>
+                </thead>
+                <tbody id="sim-tbody"></tbody>
+              </table>
+            </div>
           </div>
         </div>
+
+        <!-- PANEL 4: VARDİYA TAKİBİ -->
         <div class="panel" id="emp-shifts">
-          <h2 class="page-title">Vardiya Takibi</h2>
+          <h2 class="page-title">Vardiya ve Hakediş Geçmişi</h2>
           <div class="card glass-card">
-            <div class="table-wrap"><table class="data-table"><thead><tr><th>Isci</th><th>Giris</th><th>Cikis</th><th>Sure</th><th>Hakedis</th><th>Durum</th></tr></thead><tbody id="shifts-tbody"><tr class="empty-row"><td colspan="6">Henuz vardiya kaydi yok.</td></tr></tbody></table></div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>İşçi</th><th>Tarih</th><th>Süre</th><th>Hakediş</th><th>Kalan Kasa</th><th>Durum</th></tr>
+                </thead>
+                <tbody id="shifts-tbody">
+                  <tr class="empty-row"><td colspan="6">Henüz vardiya kaydı yok. İşçiler mesaisini tamamladıkça kayıtlar buraya eklenir.</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div class="panel" id="emp-defindex">
-          <h2 class="page-title">DeFindex Vault Getiri</h2>
+
+        <!-- PANEL 5: SÖZLEŞME BİLGİLERİ -->
+        <div class="panel" id="emp-contract">
+          <h2 class="page-title">Sözleşme &amp; DeFindex Vault Detayları</h2>
           <div class="card glass-card">
-            <div class="info-row"><span class="info-label">Vault ID</span><span class="info-val mono">CCJWW63W...ITD5</span></div>
-            <div class="info-row"><span class="info-label">APY</span><span class="info-val text-green">%11.45</span></div>
-            <div class="info-row"><span class="info-label">Nemalasan</span><span class="info-val" id="defindex-principal">0 USDC</span></div>
-            <div class="info-row"><span class="info-label">Biriken Getiri</span><span class="info-val text-green" id="defindex-earned">+0 USDC</span></div>
+            <div class="info-row"><span class="info-label">ShiftPay Smart Contract</span><a href="https://stellar.expert/explorer/testnet/contract/CDV3G7DHQEVUAMKRKK6UXVAUPLY277RRJVZNYAQX44OK4VIW5XUWFPII" target="_blank" class="info-val mono link">CDV3G7DH...WFPII ↗</a></div>
+            <div class="info-row"><span class="info-label">DeFindex Vault</span><span class="info-val mono text-green">CCJWW63W...ITD5 (%11.45 APY)</span></div>
+            <div class="info-row"><span class="info-label">Ağ</span><span class="info-val">Stellar Testnet (Soroban Protocol 22)</span></div>
+            <div class="info-row"><span class="info-label">Nemalanan Güncel Kasa</span><span class="info-val font-bold" id="defindex-principal">10,000.00 USDC</span></div>
+            <div class="info-row"><span class="info-label">Toplam Biriken Bileşik Getiri</span><span class="info-val text-green font-bold" id="defindex-earned">+14.8520 USDC</span></div>
           </div>
         </div>
+
+        <!-- PANEL 6: ANCHOR -->
         <div class="panel" id="emp-anchor">
-          <h2 class="page-title">Turk Anchor (SEP-6)</h2>
+          <h2 class="page-title">Türk Anchor (SEP-6 TL Çıkışı)</h2>
           <div class="card glass-card">
-            <p class="text-muted mb-3">USDC to TRY off-ramp.</p>
-            <a href="https://tr-mock-anchor.fly.dev/explorer" target="_blank" class="btn btn-primary">Anchor Explorer</a>
+            <p class="text-muted mb-3">USDC bakiyelerini Türk Lirası olarak banka hesaplarına transfer etmek için Stellar SEP-6 Anchor protokolü kullanılır.</p>
+            <a href="https://tr-mock-anchor.fly.dev/explorer" target="_blank" class="btn btn-primary">Anchor Explorer ↗</a>
           </div>
         </div>
       </div>
     </main>
   </div>
 
-  <!-- MERCHANT DASHBOARD -->
+  <!-- ===== SCREEN 4: MERCHANT DASHBOARD ===== -->
   <div class="screen" id="screen-merchant">
     <header class="topbar">
       <div class="topbar-left">
-        <div class="brand-mini"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span>ShiftPay</span></div>
+        <div class="brand-mini">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <span>ShiftPay</span>
+        </div>
         <span class="topbar-role-badge badge-merchant">Esnaf Paneli</span>
       </div>
       <div class="topbar-right">
-        <span class="topbar-user" id="merchant-topbar-name">Kullanici</span>
-        <button class="btn-sm btn-outline" id="btn-merchant-logout">Cikis</button>
+        <button class="btn-sm btn-accent mr-2" id="btn-topbar-scan-mrc" style="display: inline-flex; align-items: center; gap: 6px;">
+          <span>📷</span> Tek QR Oku
+        </button>
+        <span class="topbar-user" id="merchant-topbar-name">Kullanıcı</span>
+        <button class="btn-sm btn-outline" id="btn-merchant-logout">Çıkış</button>
       </div>
     </header>
+
     <main class="dashboard">
       <aside class="sidebar">
         <nav class="sidebar-nav">
-          <button class="sidebar-btn active" data-panel="mrc-overview"><span>📊</span> Genel Bakis</button>
-          <button class="sidebar-btn" data-panel="mrc-pos"><span>📱</span> POS / Odeme Al</button>
-          <button class="sidebar-btn" data-panel="mrc-transactions"><span>📋</span> Islem Gecmisi</button>
-          <button class="sidebar-btn" data-panel="mrc-withdraw"><span>🏦</span> IBANa Cek</button>
+          <button class="sidebar-btn active" data-panel="mrc-pos"><span>📱</span> POS / Ödeme Al</button>
+          <button class="sidebar-btn" data-panel="mrc-overview"><span>📊</span> Raporlar</button>
+          <button class="sidebar-btn" data-panel="mrc-transactions"><span>📋</span> İşlem Geçmişi</button>
+          <button class="sidebar-btn" data-panel="mrc-withdraw"><span>🏦</span> IBAN'a Çek</button>
         </nav>
       </aside>
+
       <div class="content">
-        <div class="panel active" id="mrc-overview">
-          <h2 class="page-title">Genel Bakis</h2>
-          <div class="stat-grid">
-            <div class="stat-card glass-card"><span class="stat-label">Gunluk Tahsilat</span><span class="stat-val text-green" id="mrc-stat-today">0.00 TRY</span></div>
-            <div class="stat-card glass-card"><span class="stat-label">Toplam Bakiye</span><span class="stat-val text-cyan" id="mrc-stat-total">0.00 TRY</span></div>
-            <div class="stat-card glass-card"><span class="stat-label">Bugunku Islem</span><span class="stat-val" id="mrc-stat-txcount">0</span></div>
-            <div class="stat-card glass-card"><span class="stat-label">IBANa Cekilen</span><span class="stat-val" id="mrc-stat-withdrawn">0.00 TRY</span></div>
+        <!-- MERCHANT PANEL 1 (DEFAULT ACTIVE): POS ÖDEME AL (GERÇEK QR DOĞRUDAN SAYFADA) -->
+        <div class="panel active" id="mrc-pos">
+          <div class="stat-grid mb-4">
+            <div class="stat-card glass-card"><span class="stat-label">Günlük Tahsilat</span><span class="stat-val text-green" id="mrc-stat-today">0.00 TRY</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Toplam Kasa</span><span class="stat-val text-cyan" id="mrc-stat-total">0.00 TRY</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Bugünkü İşlem</span><span class="stat-val" id="mrc-stat-txcount">0</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">IBAN'a Çekilen</span><span class="stat-val" id="mrc-stat-withdrawn">0.00 TRY</span></div>
           </div>
-        </div>
-        <div class="panel" id="mrc-pos">
-          <h2 class="page-title">POS Odeme Al</h2>
-          <div class="card glass-card text-center">
-            <div class="pos-amount-display">
+
+          <div class="card glass-card text-center mb-4" style="max-width: 480px; margin: 0 auto; border: 1px solid rgba(253, 121, 168, 0.4); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);">
+            <div style="margin-bottom: 1rem;">
+              <span class="badge" style="background: rgba(253, 121, 168, 0.2); color: #fd79a8; border: 1px solid rgba(253, 121, 168, 0.4); font-size: 0.85rem; padding: 6px 14px;">
+                ● Canlı POS Tahsilat Terminali
+              </span>
+            </div>
+
+            <div class="pos-amount-display" style="margin-bottom: 1.25rem;">
               <span class="pos-currency">TRY</span>
               <input type="number" id="inp-pos-amount" value="180" min="5" step="5" class="pos-amount-input">
             </div>
+
+            <!-- GERÇEK DİNAMİK POS QR KODU -->
             <div class="qr-area">
-              <div class="qr-placeholder" id="qr-canvas">
-                <svg width="160" height="160" viewBox="0 0 24 24" fill="currentColor" opacity="0.3"><path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 13h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v3h-3v-3zm-5 0h3v3h-3v-3zm2 5h3v3h-3v-3zm3 0h3v3h-3v-3zm-5 2h2v2h-2v-2zm-3-4h2v2h-2v-2z"/></svg>
+              <div class="qr-display-container" style="display: inline-block; padding: 16px; background: #ffffff; border-radius: 20px; box-shadow: 0 14px 40px rgba(253, 121, 168, 0.3); margin: 0 auto 12px auto;">
+                <img id="merchant-pos-img" alt="POS Ödeme QR" style="width: 210px; height: 210px; display: block; border-radius: 10px;">
               </div>
-              <p class="qr-hint">Isci bu QRi cuzdan uygulamasindan okutarak odeme yapar.</p>
+              <p class="qr-hint" style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+                İşçi bu QR'ı mobil cüzdanından okutarak belirtilen tutar kadar çekim yapar.
+              </p>
             </div>
-            <button class="btn btn-accent btn-block mt-3" id="btn-generate-qr">QR Olustur</button>
-            <button class="btn btn-ghost btn-block mt-2" id="btn-simulate-payment">Odeme Simule Et (Test)</button>
+
+            <!-- ACTION BUTTONS -->
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <button class="btn btn-accent btn-block" id="btn-simulate-payment" style="padding: 12px; font-size: 0.95rem; background: linear-gradient(135deg, #fd79a8, #e84393);">
+                <span>📱 Ödeme Simüle Et (180 TL Hakediş Çek)</span>
+              </button>
+              <button class="btn btn-outline btn-block" id="btn-open-scanner-mrc" style="padding: 10px; font-size: 0.9rem;">
+                <span>📷 Tek QR Okuyucu ile Tara</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- POS CANLI TAHSILLAT GEÇMİŞİ -->
+          <div class="card glass-card">
+            <h3 style="margin-bottom: 1rem;">📋 Son Tahsilatlar &amp; POS İşlem Geçmişi</h3>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>Tarih</th><th>İşçi</th><th>Tutar</th><th>Durum</th></tr>
+                </thead>
+                <tbody id="mrc-tx-tbody">
+                  <tr class="empty-row"><td colspan="4">Henüz işlem yok. Yukarıdaki QR kodunu okutarak ödeme alın.</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div class="panel" id="mrc-transactions">
-          <h2 class="page-title">Islem Gecmisi</h2>
-          <div class="card glass-card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Tarih</th><th>Isci</th><th>Tutar</th><th>Durum</th></tr></thead><tbody id="mrc-tx-tbody"><tr class="empty-row"><td colspan="4">Henuz islem yok.</td></tr></tbody></table></div></div>
+
+        <!-- MERCHANT PANEL 2: DETAYLI RAPORLAR -->
+        <div class="panel" id="mrc-overview">
+          <h2 class="page-title">Esnaf Kasa Raporları</h2>
+          <div class="card glass-card">
+            <p class="text-muted">Günlük tahsilat ve hakediş özetleri.</p>
+          </div>
         </div>
+
+        <!-- MERCHANT PANEL 3: TÜM İŞLEMLER -->
+        <div class="panel" id="mrc-transactions">
+          <h2 class="page-title">Tüm İşlem Geçmişi</h2>
+          <div class="card glass-card">
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead><tr><th>Tarih</th><th>İşçi</th><th>Tutar</th><th>Durum</th></tr></thead>
+                <tbody id="mrc-all-tx-tbody"><tr class="empty-row"><td colspan="4">Henüz işlem yok.</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- MERCHANT PANEL 4: IBAN ÇEK -->
         <div class="panel" id="mrc-withdraw">
-          <h2 class="page-title">IBANa TL Cek (SEP-6 Off-Ramp)</h2>
+          <h2 class="page-title">IBAN'a TL Çek (SEP-6 Off-Ramp)</h2>
           <div class="card glass-card">
             <form id="form-mrc-withdraw">
-              <div class="form-group"><label>Cekilecek Tutar (TRY)</label><input type="number" id="inp-withdraw-amount" min="50" step="10" required></div>
-              <div class="form-group"><label>Sirket IBAN</label><input type="text" id="inp-withdraw-iban" placeholder="TR..." class="mono" required></div>
-              <button type="submit" class="btn btn-primary btn-block">Anchor Uzerinden IBANa Cek</button>
+              <div class="form-group"><label>Çekilecek Tutar (TRY)</label><input type="number" id="inp-withdraw-amount" min="50" step="10" required></div>
+              <div class="form-group"><label>Şirket / Esnaf IBAN</label><input type="text" id="inp-withdraw-iban" placeholder="TR..." class="mono" required></div>
+              <button type="submit" class="btn btn-primary btn-block">Banka Hesabına Aktar (Anında Havale)</button>
             </form>
           </div>
         </div>
@@ -210,10 +490,88 @@
     </main>
   </div>
 
+  <!-- ===== UNIVERSAL TEK QR OKUYUCU MODAL ===== -->
+  <div class="modal-backdrop" id="qr-scanner-modal" style="display: none;">
+    <div class="modal-card glass-card" style="max-width: 500px;">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>📷</span> Tek QR Okuyucu
+          </h3>
+          <p class="text-muted" style="font-size: 0.82rem; margin: 4px 0 0 0;">
+            Tüm ShiftPay QR kodlarını otomatik algılar (Check-In, Check-Out veya Esnaf POS).
+          </p>
+        </div>
+        <button class="modal-close-btn" id="btn-close-scanner">&times;</button>
+      </div>
+
+      <div style="margin: 1.25rem 0 0.5rem 0;">
+        <div class="scanner-tabs" style="display: flex; gap: 8px; margin-bottom: 1rem;">
+          <button class="scanner-tab-btn active" data-tab="tab-quick">⚡ Hızlı Test</button>
+          <button class="scanner-tab-btn" data-tab="tab-camera">📹 Canlı Kamera</button>
+          <button class="scanner-tab-btn" data-tab="tab-file">📁 Görsel Yükle</button>
+        </div>
+
+        <!-- Tab 1: Quick Test / Simulation Buttons -->
+        <div class="scanner-tab-content active" id="tab-quick">
+          <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 12px;">
+            Tek QR motorunun tür algılamasını test etmek için istediğiniz QR türünü seçin:
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <button class="btn btn-accent btn-block" id="btn-quick-scan-checkin" style="text-align: left; padding: 12px 16px; border-radius: 12px;">
+              <div style="font-weight: 700; font-size: 0.95rem;">🟢 1. Şantiye Check-In QR (İşçi Girişi)</div>
+              <div style="font-size: 0.78rem; opacity: 0.9; margin-top: 2px;">
+                İşçi bilgilerini (Ahmet Yılmaz, G...) otomatik çeker ve giriş saatini kaydeder.
+              </div>
+            </button>
+            <button class="btn btn-outline btn-block" id="btn-quick-scan-checkout" style="text-align: left; padding: 12px 16px; border-radius: 12px; border-color: rgba(255, 165, 2, 0.6);">
+              <div style="font-weight: 700; color: #ffa502; font-size: 0.95rem;">🏁 2. Şantiye Check-Out QR (İşçi Çıkışı)</div>
+              <div style="font-size: 0.78rem; opacity: 0.9; margin-top: 2px;">
+                Atanan saat dolmuşsa çıkışı onaylar ve hakedişi dağıtır. Erken çıkışta hata verir.
+              </div>
+            </button>
+            <button class="btn btn-outline btn-block" id="btn-quick-scan-merchant" style="text-align: left; padding: 12px 16px; border-radius: 12px; border-color: rgba(253, 121, 168, 0.5);">
+              <div style="font-weight: 700; color: #fd79a8; font-size: 0.95rem;">🏪 3. Esnaf POS Ödeme QR (Hakediş Çek)</div>
+              <div style="font-size: 0.78rem; opacity: 0.9; margin-top: 2px;">
+                İşçi hakedişinden belirtilen tutarı çeker ve esnaf kasasına aktarır.
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab 2: Live Camera Feed -->
+        <div class="scanner-tab-content" id="tab-camera" style="display: none;">
+          <div id="qr-reader-video" style="width: 100%; min-height: 240px; background: #000; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+            <span class="text-muted" style="font-size: 0.85rem;" id="camera-status-text">Kamera bekleniyor...</span>
+          </div>
+          <div style="display: flex; gap: 8px; margin-top: 10px;">
+            <button class="btn-sm btn-accent btn-block" id="btn-start-camera">▶ Kamerayı Başlat</button>
+            <button class="btn-sm btn-outline btn-block" id="btn-stop-camera">⏹ Durdur</button>
+          </div>
+        </div>
+
+        <!-- Tab 3: Image File Upload -->
+        <div class="scanner-tab-content" id="tab-file" style="display: none;">
+          <div style="border: 2px dashed var(--border); border-radius: 12px; padding: 2rem 1rem; text-align: center; background: rgba(255,255,255,0.02);">
+            <input type="file" id="inp-qr-file" accept="image/*" style="display: none;">
+            <label for="inp-qr-file" class="btn btn-outline" style="cursor: pointer;">
+              🖼️ QR Görseli Seç
+            </label>
+            <p class="text-muted" style="font-size: 0.8rem; margin-top: 8px;">Cihazınızdaki bir QR kod ekran görüntüsünü seçin.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scan Result Display -->
+      <div id="scan-result-card" style="display: none; padding: 14px; background: rgba(0, 206, 201, 0.12); border: 1px solid var(--accent); border-radius: 10px; margin-top: 12px;">
+        <div id="scan-result-badge" class="badge badge-active mb-1" style="font-size: 0.8rem;">🎯 QR Algılandı</div>
+        <div id="scan-result-msg" style="font-size: 0.9rem; font-weight: 600; color: #fff; white-space: pre-line; line-height: 1.4;"></div>
+      </div>
+    </div>
+  </div>
+
   <div id="toast-container"></div>
-    <script type="module" src="/privy-bridge.jsx"></script>
-  <script src="/app.js"></script>
+  <script type="module" src="/privy-bridge.jsx"></script>
+  <script type="module" src="/app.js"></script>
 </body>
 </html>
-
-
