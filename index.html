@@ -41,8 +41,8 @@
         <button class="role-card" id="role-employer">
           <div class="role-icon">🏢</div>
           <h3>İşveren (Employer)</h3>
-          <p>Şantiye terminali aç, canlı check-in/out QR üret, işçi hakedişlerini ve mesai sürelerini yönet, DeFindex ile atıl kasayı nemalandır.</p>
-          <span class="role-tag">Şantiye &amp; İşçi Yönetimi</span>
+          <p>Şirket terminali aç, canlı check-in/out QR üret, işçi hakedişlerini ve mesai sürelerini yönet, DeFindex ile atıl kasayı nemalandır.</p>
+          <span class="role-tag">Şirket &amp; İşçi Yönetimi</span>
         </button>
         <button class="role-card" id="role-merchant">
           <div class="role-icon">🏪</div>
@@ -76,7 +76,7 @@
     <main class="dashboard">
       <aside class="sidebar">
         <nav class="sidebar-nav">
-          <button class="sidebar-btn active" data-panel="emp-terminal"><span>📱</span> Şantiye Terminali (QR)</button>
+          <button class="sidebar-btn active" data-panel="emp-terminal"><span>📱</span> Şirket Terminali (QR)</button>
           <button class="sidebar-btn" data-panel="emp-workers"><span>👥</span> İşçi &amp; Hakediş Yönetimi</button>
           <button class="sidebar-btn" data-panel="emp-deposit"><span>🔒</span> Teminat Kilitle &amp; Getiri</button>
           <button class="sidebar-btn" data-panel="emp-shifts"><span>📋</span> Vardiya Takibi</button>
@@ -86,7 +86,7 @@
       </aside>
 
       <div class="content">
-        <!-- PANEL 1 (DEFAULT ACTIVE): ŞANTİYE TERMINALI (QR DOĞRUDAN SAYFADA) -->
+        <!-- PANEL 1 (DEFAULT ACTIVE): ŞİRKET TERMINALI (QR DOĞRUDAN SAYFADA) -->
         <div class="panel active" id="emp-terminal">
           <!-- Live DeFindex Stream Banner -->
           <div class="defindex-live-banner glass-card mb-3">
@@ -135,7 +135,7 @@
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
               <span class="badge badge-active" id="terminal-qr-badge" style="font-size: 0.85rem; padding: 6px 14px;">
-                ● Canlı Şantiye Check-In QR'ı
+                ● Canlı Şirket Check-In QR'ı
               </span>
               <div style="display: flex; gap: 8px;">
                 <button class="btn-sm btn-outline" id="btn-print-qr-pdf" title="QR Kodunu PDF Olarak Bastır / İndir" style="display: inline-flex; align-items: center; gap: 4px;">
@@ -149,11 +149,11 @@
 
             <!-- GERÇEK DİNAMİK QR KODU -->
             <div class="qr-display-container" style="display: inline-block; padding: 16px; background: #ffffff; border-radius: 20px; box-shadow: 0 16px 40px rgba(0, 206, 201, 0.3); margin-bottom: 1.25rem;">
-              <img id="employer-qr-img" alt="Şantiye QR Kodu" style="width: 230px; height: 230px; display: block; border-radius: 10px;">
+              <img id="employer-qr-img" alt="Şirket QR Kodu" style="width: 230px; height: 230px; display: block; border-radius: 10px;">
             </div>
 
             <p class="text-muted" id="terminal-qr-hint" style="font-size: 0.88rem; margin-bottom: 1.25rem; line-height: 1.4;">
-              İşçiler şantiyeye geldiğinde bu QR'ı mobil uygulamalarından okutur. Kişi adı ve Stellar cüzdan adresi (<code class="mono">G...</code>) anında otomatik olarak sisteme çekilir.
+              İşçiler şirkete geldiğinde bu QR'ı mobil uygulamalarından okutur. Kişi adı ve Stellar cüzdan adresi (<code class="mono">G...</code>) anında otomatik olarak sisteme çekilir.
             </p>
 
             <!-- DOĞRUDAN QR'IN ALTINDAKİ GÜNLÜK ÜCRET & ATANAN SÜRE ALANI -->
@@ -196,52 +196,12 @@
             </div>
           </div>
 
-          <!-- KULLANICI / İŞÇİ YÖNETİMİ TABLOSU (GİRİŞ/ÇIKIŞ SAATLERİ & ATANAN SÜRE & DÜZENLENEBİLİR HAKEDİŞ) -->
-          <div class="card glass-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 8px;">
-              <div>
-                <h3 style="margin-bottom: 2px;">👥 İşçi &amp; Hakediş Yönetimi (Mesai &amp; Saat Takibi)</h3>
-                <p class="text-muted" style="font-size: 0.8rem; margin: 0;">
-                  İşçilerin giriş-çıkış tarih/saatlerini görebilir, atanan saat sınırını takip edebilir ve hakedişlerini anında düzenleyebilirsiniz.
-                </p>
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <span class="badge badge-active" id="active-worker-count-badge">0 Çalışıyor</span>
-                <span class="badge" id="completed-worker-count-badge" style="background: rgba(46, 213, 115, 0.15); color: #2ed573; border: 1px solid rgba(46, 213, 115, 0.3);">0 Çıkış Yaptı</span>
-              </div>
-            </div>
-
-            <div class="table-wrap">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>İşçi</th>
-                    <th>Cüzdan (Stellar)</th>
-                    <th>Giriş (Tarih &amp; Saat)</th>
-                    <th>Çıkış (Tarih &amp; Saat)</th>
-                    <th>Atanan Süre</th>
-                    <th>Çalışılan Süre</th>
-                    <th>Günlük Hakediş</th>
-                    <th>Durum</th>
-                    <th>Kullanılabilir Limit / İşlem</th>
-                  </tr>
-                </thead>
-                <tbody id="terminal-workers-tbody">
-                  <tr class="empty-row">
-                    <td colspan="9">Henüz QR okutan işçi yok. Yukarıdaki Giriş QR kodunu okutarak işçi girişi yapın.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- PANEL 2: ÖZEL İŞÇİ & HAKEDİŞ YÖNETİMİ PANELİ (SIDEBARDA DA VAR) -->
+          <!-- PANEL 2: ÖZEL İŞÇİ & HAKEDİŞ YÖNETİMİ PANELİ (SIDEBARDA DA VAR) -->
         <div class="panel" id="emp-workers">
           <h2 class="page-title">İşçi &amp; Hakediş Yönetimi</h2>
           <div class="stat-grid mb-4">
             <div class="stat-card glass-card"><span class="stat-label">Toplam Kayıtlı İşçi</span><span class="stat-val" id="mgmt-stat-total">0</span></div>
-            <div class="stat-card glass-card"><span class="stat-label">Şu An Şantiyede</span><span class="stat-val text-green" id="mgmt-stat-active">0</span></div>
+            <div class="stat-card glass-card"><span class="stat-label">Şu An Şirkette</span><span class="stat-val text-green" id="mgmt-stat-active">0</span></div>
             <div class="stat-card glass-card"><span class="stat-label">Vardiyayı Tamamlayan</span><span class="stat-val text-cyan" id="mgmt-stat-completed">0</span></div>
             <div class="stat-card glass-card"><span class="stat-label">Toplam Tahakkuk Eden</span><span class="stat-val text-green" id="mgmt-stat-payroll">0.00 TRY</span></div>
           </div>
@@ -263,11 +223,11 @@
                     <th>Çalışılan Süre</th>
                     <th>Hakediş (Düzenle)</th>
                     <th>Durum</th>
-                    <th>Kullanılabilir Limit / İşlem</th>
+                    <th>Kullanılabilir Limit</th>
                   </tr>
                 </thead>
                 <tbody id="mgmt-workers-tbody">
-                  <tr class="empty-row"><td colspan="9">Henüz kayıtlı işçi yok. Şantiye terminalinden QR okutun.</td></tr>
+                  <tr class="empty-row"><td colspan="9">Henüz kayıtlı işçi yok. Şirket terminalinden QR okutun.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -519,13 +479,13 @@
           </p>
           <div style="display: flex; flex-direction: column; gap: 10px;">
             <button class="btn btn-accent btn-block" id="btn-quick-scan-checkin" style="text-align: left; padding: 12px 16px; border-radius: 12px;">
-              <div style="font-weight: 700; font-size: 0.95rem;">🟢 1. Şantiye Check-In QR (İşçi Girişi)</div>
+              <div style="font-weight: 700; font-size: 0.95rem;">🟢 1. Şirket Check-In QR (İşçi Girişi)</div>
               <div style="font-size: 0.78rem; opacity: 0.9; margin-top: 2px;">
                 İşçi bilgilerini (Ahmet Yılmaz, G...) otomatik çeker ve giriş saatini kaydeder.
               </div>
             </button>
             <button class="btn btn-outline btn-block" id="btn-quick-scan-checkout" style="text-align: left; padding: 12px 16px; border-radius: 12px; border-color: rgba(255, 165, 2, 0.6);">
-              <div style="font-weight: 700; color: #ffa502; font-size: 0.95rem;">🏁 2. Şantiye Check-Out QR (İşçi Çıkışı)</div>
+              <div style="font-weight: 700; color: #ffa502; font-size: 0.95rem;">🏁 2. Şirket Check-Out QR (İşçi Çıkışı)</div>
               <div style="font-size: 0.78rem; opacity: 0.9; margin-top: 2px;">
                 Atanan saat dolmuşsa çıkışı onaylar ve hakedişi dağıtır. Erken çıkışta hata verir.
               </div>

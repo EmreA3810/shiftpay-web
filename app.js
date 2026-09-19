@@ -217,7 +217,7 @@ import { Html5Qrcode } from 'html5-qrcode';
     }
 
     const isCheckout = state.terminalMode === 'CHECK_OUT';
-    const badgeText = isCheckout ? 'Şantiye Çıkış (Check-Out) QR Kodu' : 'Şantiye Giriş (Check-In) QR Kodu';
+    const badgeText = isCheckout ? 'Şirket Çıkış (Check-Out) QR Kodu' : 'Şirket Giriş (Check-In) QR Kodu';
     const wage = state.terminalWage || 1200;
     const hours = state.terminalHours || 8;
     const dateStr = state.terminalDate || getTodayStr();
@@ -263,7 +263,7 @@ import { Html5Qrcode } from 'html5-qrcode';
       '<div class="wage-highlight">₺' + wage + ' TRY (~' + (wage/35).toFixed(2) + ' USDC)</div>' +
       '</div>' +
       '<div class="footer-note">' +
-      '<strong>Talimat:</strong> İşçiler şantiyeye geliş veya gidişlerinde mobil ShiftPay cüzdanı ile bu QR kodu okutmalıdır.<br>' +
+      '<strong>Talimat:</strong> İşçiler şirkete geliş veya gidişlerinde mobil ShiftPay cüzdanı ile bu QR kodu okutmalıdır.<br>' +
       '<em>Stellar Soroban Protocol 22 akıllı sözleşmesi ile güvence altına alınmıştır.</em>' +
       '</div>' +
       '</div>' +
@@ -295,7 +295,7 @@ import { Html5Qrcode } from 'html5-qrcode';
 
     const dt = getFormattedDateTime();
 
-    /* CASE 1: CHECK_IN (Şantiye Girişi) */
+    /* CASE 1: CHECK_IN (Şirket Girişi) */
     if (payload.type === 'CHECK_IN') {
       const checkedInAddrs = new Set(state.workers.map(w => w.addr));
       let nextWorker = candidateWorkers.find(cw => !checkedInAddrs.has(cw.addr));
@@ -334,7 +334,7 @@ import { Html5Qrcode } from 'html5-qrcode';
       
       showScanResultModal(
         'CHECK_IN',
-        '✅ Şantiye Check-In Algılandı!\n' +
+        '✅ Şirket Check-In Algılandı!\n' +
         'İşçi: ' + nextWorker.name + '\n' +
         'Cüzdan: ' + shortAddr + ' (Otomatik Çekildi)\n' +
         'Giriş Zamanı: ' + dt.full + '\n' +
@@ -343,10 +343,10 @@ import { Html5Qrcode } from 'html5-qrcode';
         'Durum: Aktif Çalışıyor'
       );
 
-      toast('Şantiye Girişi: ' + nextWorker.name + ' (' + shortAddr + ') işe başladı. Atanan süre: ' + targetHours + ' Saat.', 'success');
+      toast('Şirket Girişi: ' + nextWorker.name + ' (' + shortAddr + ') işe başladı. Atanan süre: ' + targetHours + ' Saat.', 'success');
     }
 
-    /* CASE 2: CHECK_OUT (Şantiye Çıkışı - SÜRE LİMİTİ KONTROLLÜ) */
+    /* CASE 2: CHECK_OUT (Şirket Çıkışı - SÜRE LİMİTİ KONTROLLÜ) */
     else if (payload.type === 'CHECK_OUT') {
       let activeWorker = null;
       if (payload.worker_addr) {
@@ -357,7 +357,7 @@ import { Html5Qrcode } from 'html5-qrcode';
       }
 
       if (!activeWorker) {
-        toast('Şantiyede çıkış yapacak aktif çalışan işçi bulunamadı!', 'error');
+        toast('Şirkette çıkış yapacak aktif çalışan işçi bulunamadı!', 'error');
         return;
       }
 
@@ -427,14 +427,14 @@ import { Html5Qrcode } from 'html5-qrcode';
 
       showScanResultModal(
         'CHECK_OUT',
-        '🏁 Şantiye Çıkışı Onaylandı!\n' +
+        '🏁 Şirket Çıkışı Onaylandı!\n' +
         'İşçi: ' + activeWorker.name + ' (' + shortAddr + ')\n' +
         'Atanan Süre: ' + targetHours + ' Saat (Hedef Tamamlandı)\n' +
         'Giriş: ' + activeWorker.checkInTime + ' | Çıkış: ' + activeWorker.checkOutTime + '\n' +
         'Toplam Mesai: ' + activeWorker.duration + '\n' +
         'Hak Edilen Günlük Ücret: +' + activeWorker.wage + ' TRY\n' +
         'Toplam Kullanılabilir Bakiye (Limit): ' + activeWorker.claimBalance + ' TRY\n\n' +
-        'ℹ️ Muhasebe kaydı güncellendi. Gerçek para kasadan çekilmedi (DeFindex getirisinde kalmaya devam ediyor). Transfer yalnızca işçi harcama veya çekim yaptığında gerçekleşecek.'
+        'ℹ️ Muhasebe kaydı güncellendi. Gerçek para kasadan çekilmedi (DeFindex getirisinde kalmaya devam ediyor).\nİşçi bu limiti anlaşmalı esnafta anında harcayabilir. Nakit çekim ise 30 gün vade dolunca işçinin kendi mobil uygulamasından yapılacaktır.'
       );
 
       toast('✅ Mesai Tamamlandı! ' + activeWorker.name + ' için +' + activeWorker.wage + ' TRY harcama limiti tanımlandı (Kullanılabilir Bakiye: ' + activeWorker.claimBalance + ' TRY). Kasadan para düşülmedi.', 'success');
@@ -516,12 +516,12 @@ import { Html5Qrcode } from 'html5-qrcode';
 
     card.style.display = 'block';
     if (type === 'CHECK_IN') {
-      badge.textContent = '🎯 ŞANTİYE GİRİŞ QR (CHECK_IN)';
+      badge.textContent = '🎯 ŞİRKET GİRİŞ QR (CHECK_IN)';
       badge.className = 'badge badge-active mb-1';
       card.style.borderColor = 'var(--accent)';
       card.style.background = 'rgba(0, 206, 201, 0.12)';
     } else if (type === 'CHECK_OUT') {
-      badge.textContent = '🏁 ŞANTİYE ÇIKIŞ QR (CHECK_OUT)';
+      badge.textContent = '🏁 ŞİRKET ÇIKIŞ QR (CHECK_OUT)';
       badge.className = 'badge mb-1';
       badge.style.background = 'rgba(46, 213, 115, 0.2)';
       badge.style.color = '#2ed573';
@@ -728,9 +728,9 @@ import { Html5Qrcode } from 'html5-qrcode';
             '<button class="btn-xs btn-outline btn-worker-checkout" data-addr="' + w.addr + '" title="Vardiyayı bitir ve çıkış yaptır">🏁 Çıkış Yap</button>' +
             '<button class="btn-xs btn-outline btn-worker-fastforward" data-addr="' + w.addr + '" title="Test için süreyi atanan saat kadar doldurur" style="color: #f1c40f; border-color: rgba(241, 196, 15, 0.4);">⚡ Süreyi Doldur (Test)</button>' +
           '</div>'
-        : '<div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">' +
-            '<span class="mono text-cyan font-bold" style="font-size: 0.82rem;" title="Kontrat içindeki kullanılabilir bakiye">💳 Limit: ' + (w.claimBalance !== undefined ? w.claimBalance : w.wage) + ' TRY</span>' +
-            '<button class="btn-xs btn-outline btn-worker-withdraw" data-addr="' + w.addr + '" style="color: #0984e3; border-color: rgba(9, 132, 227, 0.5);" title="Anchor SEP-24 ile nakit çek">🏦 Çekim Yap</button>' +
+        : '<div style="display: flex; flex-direction: column; gap: 2px;">' +
+            '<span class="mono text-cyan font-bold" style="font-size: 0.85rem;" title="Kontrat içindeki kullanılabilir harcama limiti">💳 ' + (w.claimBalance !== undefined ? w.claimBalance : w.wage) + ' TRY Limit</span>' +
+            '<span class="text-muted" style="font-size: 0.72rem;">(Esnafta Anında / Mobilde 30G Çekim)</span>' +
           '</div>';
 
       const checkOutDisplay = isActive ? '<span class="text-muted" style="font-size: 0.8rem;">⏳ Mesaide</span>' : (w.checkOutDate ? w.checkOutDate.substring(0, 5) + ' ' + w.checkOutTime : w.checkOutTime);
@@ -953,7 +953,7 @@ import { Html5Qrcode } from 'html5-qrcode';
         if (btnModeCheckin) btnModeCheckin.classList.remove('active');
         if (terminalWageCard) terminalWageCard.style.display = 'none';
         if (terminalQrBadge) {
-          terminalQrBadge.textContent = "🏁 Canlı Şantiye Check-Out QR'ı";
+          terminalQrBadge.textContent = "🏁 Canlı Şirket Check-Out QR'ı";
           terminalQrBadge.style.background = 'rgba(255, 165, 2, 0.2)';
           terminalQrBadge.style.color = '#ffa502';
           terminalQrBadge.style.borderColor = '#ffa502';
@@ -969,13 +969,13 @@ import { Html5Qrcode } from 'html5-qrcode';
         if (btnModeCheckout) btnModeCheckout.classList.remove('active', 'checkout-mode');
         if (terminalWageCard) terminalWageCard.style.display = 'block';
         if (terminalQrBadge) {
-          terminalQrBadge.textContent = "● Canlı Şantiye Check-In QR'ı";
+          terminalQrBadge.textContent = "● Canlı Şirket Check-In QR'ı";
           terminalQrBadge.style.background = 'rgba(0, 206, 201, 0.2)';
           terminalQrBadge.style.color = 'var(--accent)';
           terminalQrBadge.style.borderColor = 'var(--accent)';
         }
         if (terminalQrHint) {
-          terminalQrHint.innerHTML = 'İşçiler şantiyeye geldiğinde bu QR\'ı mobil uygulamalarından okutur. Kişi adı ve Stellar cüzdan adresi (<code class=\'mono\'>G...</code>) anında otomatik olarak sisteme çekilir.';
+          terminalQrHint.innerHTML = 'İşçiler şirkete geldiğinde bu QR\'ı mobil uygulamalarından okutur. Kişi adı ve Stellar cüzdan adresi (<code class=\'mono\'>G...</code>) anında otomatik olarak sisteme çekilir.';
         }
         if (btnSimulateText) {
           btnSimulateText.textContent = '📱 Mobil Giriş Taramasını Simüle Et (Check-In)';
@@ -1134,42 +1134,7 @@ import { Html5Qrcode } from 'html5-qrcode';
           return;
         }
 
-        // Worker Withdraw (withdraw - Anchor SEP-24 Gerçek Çekim) click
-        const btnWithdraw = e.target.closest('.btn-worker-withdraw');
-        if (btnWithdraw) {
-          const addr = btnWithdraw.getAttribute('data-addr');
-          const worker = state.workers.find(w => w.addr === addr);
-          if (!worker) return;
-
-          const currentBal = worker.claimBalance !== undefined ? worker.claimBalance : worker.wage;
-          if (currentBal <= 0) {
-            toast('❌ Çekilebilir bakiye bulunmuyor!', 'error');
-            return;
-          }
-
-          const withdrawAmount = Math.min(currentBal, 300);
-          worker.claimBalance = currentBal - withdrawAmount;
-
-          const amountUSDC = withdrawAmount / 35;
-          state.employerLocked = Math.max(0, state.employerLocked - amountUSDC);
-          state.employerSpent += amountUSDC;
-
-          saveState();
-          updateEmployerStats();
-          renderTerminalWorkersTable();
-
-          showScanResultModal(
-            'WITHDRAW',
-            '🏦 ANCHOR SEP-24 NAKİT ÇEKİMİ (withdraw)!\n' +
-            'İşçi: ' + worker.name + '\n' +
-            'Çekilen Tutar: ' + withdrawAmount.toFixed(2) + ' TRY (~' + amountUSDC.toFixed(2) + ' USDC)\n' +
-            'Kalan Kullanılabilir Bakiye: ' + worker.claimBalance.toFixed(2) + ' TRY\n' +
-            'Gerçek Transfer: Kasadan düşüldü ve Türk Anchor (SEP-24) IBAN hesabına aktarıldı.'
-          );
-
-          toast('🏦 Çekim Başarılı! ' + worker.name + ' ' + withdrawAmount + ' TRY nakit çekti. Kalan bakiye: ' + worker.claimBalance + ' TRY', 'success');
-          return;
-        }
+// Nakit çekim işlemi işçinin kendi mobil uygulamasında (ShiftPay Mobile) 30 gün vade dolunca yapılır.
       });
     }
 
